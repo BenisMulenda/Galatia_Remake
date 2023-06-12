@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>WARRIORS</title>
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style type="text/css">
+        @font-face {
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        body {
+            background-color: rgb(21, 17, 44);
+            background-repeat: repeat;
+        }
+        
+        .animate-bottom {
+            position: relative;
+            -webkit-animation-name: animatebottom;
+            -webkit-animation-duration: 1s;
+            animation-name: animatebottom;
+            animation-duration: 1s
+        }
+        
+        @-webkit-keyframes animatebottom {
+            from {
+                bottom: -100px;
+                opacity: 0
+            }
+            to {
+                bottom: 0px;
+                opacity: 1
+            }
+        }
+        
+        @keyframes animatebottom {
+            from {
+                bottom: -100px;
+                opacity: 0
+            }
+            to {
+                bottom: 0;
+                opacity: 1
+            }
+        }
+        
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-50px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes display {
+            50% {
+                opacity: 0;
+            }
+        }
+        
+        .score {
+            z-index: 20;
+        }
+        
+        .sprite {
+            background-image: url("resources/Images/spaceship.png");
+            background-size: contain;
+            width: 42.05px;
+            height: 70.644px;
+            bottom: 20px;
+            left: 150px;
+            position: absolute;
+            z-index: 10;
+            color: white;
+            border-radius: 50%;
+            background-color: #fff;
+            box-shadow: 0 0 60px 30px #fff, 0 0 100px 60px #f0f, 0 0 140px 90px #0ff;
+        }
+        
+        .laser {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+        }
+        
+        .monster {
+            width: 70px;
+            height: 70px;
+            position: absolute;
+        }
+        
+        .monster-transition {
+            opacity: 1;
+            transition: opacity 1.5s ease-out;
+        }
+        
+        .dead-monster {
+            width: 70x;
+            height: 70px;
+            position: absolute;
+            opacity: 1;
+        }
+        
+        ul {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        
+        ul li {
+            list-style: none;
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 50%;
+            animation: grow 1.6s ease-in-out infinite;
+        }
+        
+        @keyframes grow {
+            0%,
+            40%,
+            100% {
+                transform: scale(0.2);
+            }
+            20% {
+                transform: scale(1);
+            }
+        }
+        
+        ul li:nth-child(1) {
+            animation-delay: -1.4s;
+            background: #ffff00;
+            box-shadow: 0 0 50px #ffff00;
+        }
+        
+        ul li:nth-child(2) {
+            animation-delay: -1.2s;
+            background: #76ff03;
+            box-shadow: 0 0 50px #76ff03;
+        }
+        
+        ul li:nth-child(3) {
+            animation-delay: -1s;
+            background: #f06292;
+            box-shadow: 0 0 50px #f06292;
+        }
+        
+        ul li:nth-child(4) {
+            animation-delay: -0.8s;
+            background: #4fc3f7;
+            box-shadow: 0 0 50px #4fc3f7;
+        }
+        
+        ul li:nth-child(5) {
+            animation-delay: -0.6s;
+            background: #ba68c8;
+            box-shadow: 0 0 50px #ba68c8;
+        }
+        
+        ul li:nth-child(6) {
+            animation-delay: -0.4s;
+            background: #f57c00;
+            box-shadow: 0 0 50px #f57c00;
+        }
+        
+        ul li:nth-child(7) {
+            animation-delay: -0.2s;
+            background: #673ab7;
+            box-shadow: 0 0 50px #673ab7;
+        }
+        
+        .playArea {
+            position: absolute;
+            width: 350px;
+            background: black;
+            overflow: hidden;
+            height: 600px;
+            display: flex;
+            top: 4%;
+            left: 37%;
+            text-align: center;
+        }
+        
+        .menu {
+            position: relative;
+            text-align: center;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 25px;
+            top: 200px;
+        }
+        
+        .score {
+            position: relative;
+            z-index: 20px;
+            color: white;
+            top: 10px;
+            left: -120px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        
+        .time {
+            position: absolute;
+            z-index: 20px;
+            color: white;
+            top: 10px;
+            left: 270px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        
+        @media only screen and (min-width:280px) {
+            .playArea {
+                position: absolute;
+                width: 100%;
+                background: black;
+                overflow: hidden;
+                height: 100%;
+                display: flex;
+                top: 0px;
+                left: 0px;
+                bottom: 0px;
+                right: 0px;
+                text-align: center;
+            }
+        }
+        
+        @media only screen and (min-width:768px) {
+            .playArea {
+                position: absolute;
+                width: 350px;
+                background: black;
+                overflow: hidden;
+                height: 600px;
+                display: flex;
+                top: 20%;
+                left: 27%;
+                text-align: center;
+            }
+        }
+        
+        @media only screen and (min-width:1024px) {
+            .playArea {
+                position: absolute;
+                width: 350px;
+                background: black;
+                overflow: hidden;
+                height: 600px;
+                display: flex;
+                top: 28%;
+                left: 34%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body onload="myFunction()" style="text-align:center;width:100%;height:100%">
+    <script src="jquery351.min.js"></script>
+
+
+    <div id="loader">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <div style="border: 5px solid red;display:none" id="playArea" class="playArea">
+        <p class="score">Score</p>
+        <p class="time">Time</p>
+        <p class="menu" onclick="MainMenu()" id="over" style="color:red; display:none">Game Over</p>
+        <p class="time" id="timer" style="top:25px;margin-left:10px;padding-top:10px">00</p>
+        <p class="time" id="scorer" style="top:25px;margin-left:-225px;padding-top:10px">00</p>
+        <p class="menu" id="play" onclick="PlayGame()" style="color:white">play</p>
+        <p class="menu" style="color:white" onclick="Sound()" id="sound_set">Toggle Sound: Off</p>
+        <div id="sprite" style="display:none" class="sprite"></div>
+    </div>
+
+
+
+    <script>
+        var myVar;
+        var score = 0;
+        //console.log(sprite)
+        sprite.addEventListener("touchstart", fireLaser);
+
+        function myFunction() {
+            //clearInterval(d)
+            myVar = setTimeout(showPage, 2000);
+
+        }
+        //countdown
+
+
+
+        function showPage() {
+            loader.style.display = "none";
+            // document.getElementById("myDiv ").style.display = "flex ";
+            playArea.style.display = "block ";
+
+            //window.addEventListener("keydown ", letShipFly);
+            /* let monsterInterval = setInterval(() => {
+                 createMonster()
+             }, 2100);*/
+        }
+
+        function PlayGame() {
+            sprite.style.display = "block";
+            play.style.display = "none";
+            sound_set.style.display = "none";
+            score = 0;
+            scorer.innerHTML = score;
+            window.addEventListener("keydown", letShipFly);
+
+
+            let monsterInterval = setInterval(() => {
+                createMonster()
+            }, 2100);
+
+            var x = 60;
+            var d = setInterval(function() {
+                x = x - 1;
+                timer.innerHTML = x;
+
+                if (x == 0) {
+                    clearInterval(d);
+                    clearInterval(monsterInterval);
+                    over.style.display = "block"
+                        //time.innerHtml = "Game Over"
+                }
+            }, 1000);
+
+        }
+
+        function MainMenu() {
+            sprite.style.display = "none";
+            play.style.display = "block";
+            sound_set.style.display = "block";
+            over.style.display = "none"
+            timer.innerHTML = "00";
+        }
+
+        let justice = new Audio("resources/Audio/alien-spaceship_daniel_simion.mp3 ");
+
+        function Sound() {
+            justice.loop = true;
+            //justice.play();
+            if (sound_set.innerHTML === "Toggle Sound: Off") {
+                justice.play();
+                document.getElementById("sound_set").innerHTML = "Toggle Sound: On";
+
+            } else {
+                justice.pause();
+                document.getElementById("sound_set").innerHTML = "Toggle Sound: Off";
+
+            }
+        }
+
+        var shooter = document.getElementById("sprite");
+        //console.log(window.getComputedStyle(shooter).getPropertyValue('left'));
+        //console.log(sprite);
+
+        function moveLeft() {
+
+            let leftPosition = window.getComputedStyle(shooter).getPropertyValue('left');
+            if (shooter.style.left === "18px ") {
+                return;
+            } else {
+                let position = parseInt(leftPosition);
+                position -= 4;
+                //console.log(position);
+                var string = position + "px ";
+                shooter.style.left = string;
+            }
+        }
+
+        function moveRight() {
+            let leftPosition = window.getComputedStyle(shooter).getPropertyValue('left');
+            if (shooter.style.left === "290px") {
+                return;
+            } else {
+                let position = parseInt(leftPosition);
+                position += 4;
+                var string = position + "px";
+                shooter.style.left = string;
+            }
+        }
+
+        function fireLaser() {
+            let laser = createLaserElement();
+            playArea.appendChild(laser);
+            let laserSFX = new Audio('resources/Audio/Power-Up-KP-1879176533.mp3');
+            laserSFX.play();
+            moveLaser(laser);
+        }
+
+        function createLaserElement() {
+            let xPos = parseInt(window.getComputedStyle(shooter).getPropertyValue('left'));
+            let yPos = parseInt(window.getComputedStyle(shooter).getPropertyValue('top'));
+            //console.log(yPos);
+            xPos -= 145;
+            yPos -= 120;
+            //console.log(yPos);
+            let newLaser = document.createElement('img');
+            newLaser.src = 'resources/Images/unnamed.png';
+            newLaser.classList.add('laser');
+            var x = xPos + "px ";
+            var y = yPos + "px ";
+            newLaser.style.left = x;
+            newLaser.style.top = y;
+            return newLaser;
+        }
+
+        function moveLaser(laser) {
+            let xPos = parseInt(window.getComputedStyle(shooter).getPropertyValue('left'));
+            var x = xPos + "px ";
+            laser.style.left = x;
+
+            let laserInterval = setInterval(() => {
+                let yPos = parseInt(laser.style.top);
+                let monsters = document.querySelectorAll(".monster ");
+
+                monsters.forEach(monster => {
+                    if (checkLaserCollision(laser, monster)) {
+						laser.remove();
+                        let explosion = new Audio('resources/Audio/Explosion+7.mp3');
+                        monster.src = "resources/Images/explosion.png ";
+                        explosion.play();
+                        monster.classList.remove("monster");
+						score = score + 1;
+						scorer.innerHTML = score;
+                        monster.classList.add("dead-monster");
+						
+                    }
+                });
+
+                if (yPos === 800) {
+                    laser.remove();
+                } else {
+                    yPos -= 4;
+                    var string = yPos + "px ";
+                    laser.style.top = string;
+                }
+            }, 10)
+        }
+
+        const monsterImgs = ['resources/Images/asteriod.png', 'resources/Images/ceUgkCU.png', 'resources/Images/Enemy2.png'];
+
+        function createMonster() {
+            let newMonster = document.createElement('img');
+            let monsterSpritImg = monsterImgs[Math.floor(Math.random() * monsterImgs.length)];
+            newMonster.src = monsterSpritImg;
+            newMonster.classList.add('monster');
+            var d = 50 + "px ";
+            newMonster.style.top = d;
+            //console.log(newMonster.style.top);
+            var left = Math.floor(Math.random() * 200) + 18;
+            var string = left + "px ";
+            newMonster.style.left = string;
+            playArea.appendChild(newMonster);
+            moveMonster(newMonster);
+        }
+
+        function moveMonster(monster) {
+            //monster.style.top="50px ";
+            let moveMonsterInterval = setInterval(() => {
+                let yPosition = parseInt(monster.style.top);
+                //console.log(yPosition);
+                if (yPosition >= 350) {
+                    monster.remove();
+                } else {
+                    yPosition += 4;
+                    //console.log(yPosition);
+                    var string = yPosition + "px ";
+                    //console.log(string);
+                    monster.style.top = string;
+                }
+            }, 30)
+        }
+
+        function checkLaserCollision(laser, monster) {
+
+            let laserleft = parseInt(laser.style.left);
+            let laserTop = parseInt(laser.style.top);
+            //let laserBottom = laserTop-50;
+            //let laserRight = laserleft+50;
+            let monsterTop = parseInt(monster.style.top);
+            let monsterleft = parseInt(monster.style.left);
+            //let monsterRight = monsterleft+70;
+            let monsterBottom = monsterTop + 70;
+
+
+            //console.log("monster right: " + monsterRight);
+
+            if (laserleft + 40 >= monsterleft && monsterleft >= laserleft - 40) {
+                if (laserTop <= monsterBottom && laserTop >= monsterTop) {
+                    
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+
+        function letShipFly(event) {
+            console.log("here");
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                moveLeft();
+            } else if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                moveRight();
+            } else if (event.key === " ") {
+                event.preventDefault()
+                fireLaser()
+            }
+        }
+
+        if ('DeviceOrientationEvent' in window) {
+            window.addEventListener('deviceorientation', deviceOrientationHandler, true);
+        } else {
+            //alert Window 
+            alert('Device Orientation API not supported');
+        }
+
+        function deviceOrientationHandler(eventData) {
+            var tiltLR = eventData.gamma;
+            var tiltFB = eventData.beta;
+            var dir = eventData.alpha;
+
+            if (tiltLR <= 90 && tiltLR >= 0) { //right
+                event.preventDefault();
+                moveRight();
+            } else if (tiltLR <= 0 && tiltLR >= -90) {
+                event.preventDefault();
+                moveLeft();
+            }
+        }
+    </script>
+
+</body>
+
+</html>
